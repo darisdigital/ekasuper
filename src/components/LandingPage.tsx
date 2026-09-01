@@ -72,26 +72,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         }`}
       >
         <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between">
-          {/* LOGO */}
-          <button
-            type="button"
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
-            }
-            className="flex items-center gap-2"
-          >
-            <span className="material-symbols-outlined text-primary text-[32px]">
-              agriculture
-            </span>
-
-            <span className="text-2xl font-bold text-primary tracking-tight">
-              EKA SUPER
-            </span>
-          </button>
-
+          {/* LOGO EKA SUPER */}
+<button
+  type="button"
+  onClick={() =>
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
+  className="flex items-center cursor-pointer"
+  aria-label="EKA SUPER - Beranda"
+>
+  <img
+    src="/logo-ekasuper.png"
+    alt="EKA SUPER"
+    className="h-16 w-auto object-contain"
+  />
+</button>
           {/* DESKTOP MENU */}
           <nav className="hidden md:flex items-center gap-2">
             <a
