@@ -1,11 +1,13 @@
-```tsx
 import React, { useState, useEffect } from 'react';
 import { Product } from '../types';
-import { formatRupiah, createWhatsAppUrl } from '../utils/formatters';
+import {
+  formatRupiah,
+  createWhatsAppUrl,
+} from '../utils/formatters';
 import {
   HERO_BG_IMAGE,
   WHATSAPP_NUMBER,
-  FACTORY_ADDRESS
+  FACTORY_ADDRESS,
 } from '../data/initialData';
 import { OrderDrawerModal } from './OrderDrawerModal';
 
@@ -16,14 +18,21 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   products,
-  onPlaceOrder
+  onPlaceOrder,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [selectedProductForOrder, setSelectedProductForOrder] =
-    useState<Product | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] =
+    useState(false);
+  const [
+    selectedProductForOrder,
+    setSelectedProductForOrder,
+  ] = useState<Product | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
 
+  // =========================
+  // SCROLL
+  // =========================
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -32,10 +41,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener(
+        'scroll',
+        handleScroll
+      );
     };
   }, []);
 
+  // =========================
+  // PRODUCT CATEGORY
+  // =========================
   const tempeProducts = products.filter(
     (product) => product.category === 'TEMPE'
   );
@@ -50,13 +65,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       product.category !== 'TAHU'
   );
 
-  const openOrderWithProduct = (product: Product) => {
+  // =========================
+  // ORDER
+  // =========================
+  const openOrderWithProduct = (
+    product: Product
+  ) => {
     setSelectedProductForOrder(product);
     setIsOrderModalOpen(true);
   };
 
   const defaultWaMessage =
-    'Halo EKA SUPER Garut, saya ingin memesan Tahu & Tempe segar. Mohon informasi produk dan harga terbaru.';
+    'Halo EKA SUPER Garut, saya ingin berkonsultasi / memesan Tahu & Tempe segar.';
 
   const defaultWaUrl = createWhatsAppUrl(
     WHATSAPP_NUMBER,
@@ -67,25 +87,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     <div className="bg-background text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
 
       {/* =========================
-          HEADER / NAVBAR
-      ========================== */}
+          HEADER
+      ========================= */}
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
             ? 'bg-surface/95 backdrop-blur-md shadow-md py-3'
             : 'bg-surface/90 backdrop-blur-md shadow-sm py-4 border-b border-outline-variant/30'
         }`}
-        id="main-header"
       >
         <div className="flex justify-between items-center px-6 max-w-[1280px] mx-auto w-full">
 
-          {/* BRAND */}
+          {/* LOGO */}
           <div
             className="flex items-center gap-2 cursor-pointer active:scale-95 transition-transform"
             onClick={() =>
               window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+                behavior: 'smooth',
               })
             }
           >
@@ -99,7 +118,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           {/* DESKTOP NAVIGATION */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-4">
 
             <a
               href="#mengapa"
@@ -124,34 +143,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* WHATSAPP */}
             <a
-              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:-translate-y-0.5"
               href={defaultWaUrl}
               target="_blank"
               rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:-translate-y-0.5"
             >
               <svg
                 className="w-5 h-5 fill-current"
                 viewBox="0 0 24 24"
               >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.198.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
 
-              <span>Pesan via WhatsApp</span>
+              <span>
+                Pesan via WhatsApp
+              </span>
             </a>
           </div>
 
           {/* MOBILE MENU */}
-          <div className="flex items-center md:hidden">
-            <button
-              aria-label="Menu"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-on-surface hover:bg-surface-variant rounded-full transition-colors"
-            >
-              <span className="material-symbols-outlined">
-                {mobileMenuOpen ? 'close' : 'menu'}
-              </span>
-            </button>
-          </div>
+          <button
+            aria-label="Menu"
+            onClick={() =>
+              setMobileMenuOpen(!mobileMenuOpen)
+            }
+            className="md:hidden p-2 text-on-surface hover:bg-surface-variant rounded-full transition-colors"
+          >
+            <span className="material-symbols-outlined">
+              {mobileMenuOpen
+                ? 'close'
+                : 'menu'}
+            </span>
+          </button>
         </div>
 
         {/* MOBILE DROPDOWN */}
@@ -160,15 +183,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <a
               href="#mengapa"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
               className="block text-sm font-semibold text-on-surface py-2 border-b border-outline-variant/30"
             >
-              Keunggulan EKA SUPER
+              Mengapa Memilih EKA SUPER
             </a>
 
             <a
               href="#produk"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
               className="block text-sm font-semibold text-on-surface py-2 border-b border-outline-variant/30"
             >
               Katalog Produk
@@ -176,7 +203,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <a
               href="#kontak"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
               className="block text-sm font-semibold text-on-surface py-2 border-b border-outline-variant/30"
             >
               Kontak
@@ -204,23 +233,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 rel="noopener noreferrer"
                 className="w-full bg-[#25D366] text-white py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
               >
-                <svg
-                  className="w-5 h-5 fill-current"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.198.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                </svg>
-
                 Chat WhatsApp Langsung
               </a>
+
             </div>
           </div>
         )}
       </header>
 
       {/* =========================
-          MAIN CONTENT
-      ========================== */}
+          MAIN
+      ========================= */}
       <main className="pt-20 flex-1">
 
         {/* HERO */}
@@ -231,11 +254,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div
               className="absolute inset-0 bg-cover bg-center opacity-30 sm:opacity-20 mix-blend-multiply"
               style={{
-                backgroundImage: `url('${HERO_BG_IMAGE}')`
+                backgroundImage: `url('${HERO_BG_IMAGE}')`,
               }}
             />
 
             <div className="absolute inset-0 bg-gradient-to-r from-surface-container-low via-surface-container-low/90 to-transparent" />
+
           </div>
 
           <div className="relative z-10 px-6 max-w-[1280px] mx-auto w-full py-16 md:py-24 grid md:grid-cols-12 gap-8 items-center">
@@ -244,26 +268,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
               <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary-container/10 text-primary font-semibold text-xs sm:text-sm rounded-full w-fit border border-primary/20 backdrop-blur-sm shadow-sm">
                 <span>🌿</span>
-                <span>Produk Segar Setiap Hari</span>
+                <span>
+                  Produk Segar Setiap Hari
+                </span>
               </span>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-on-surface tracking-tight leading-tight">
-
-                Tahu &amp; Tempe Berkualitas untuk
-
+                Tahu &amp; Tempe Berkualitas untuk{' '}
                 <span className="text-primary block mt-1 sm:mt-2">
                   Kebutuhan Keluarga dan Usaha
                 </span>
               </h1>
 
               <p className="text-base sm:text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                EKA SUPER menghadirkan tahu dan tempe berkualitas dari
-                Jayaraga, Garut untuk rumah tangga, warung, restoran,
-                katering, dan berbagai kebutuhan usaha. Diproduksi dengan
-                standar kebersihan tinggi untuk menjamin kesegaran.
+                EKA SUPER menghadirkan tahu dan
+                tempe berkualitas dari Jayaraga,
+                Garut untuk rumah tangga, warung,
+                restoran, katering, dan berbagai
+                kebutuhan usaha. Diproduksi dengan
+                standar kebersihan tinggi untuk
+                menjamin kesegaran.
               </p>
 
-              {/* LOCATION & PHONE */}
+              {/* LOCATION */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 font-normal text-on-surface-variant bg-surface/80 backdrop-blur-md p-4 rounded-xl border border-outline-variant/30 w-fit text-sm">
 
                 <div className="flex items-center gap-2">
@@ -271,7 +298,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     location_on
                   </span>
 
-                  <span>{FACTORY_ADDRESS}</span>
+                  <span>
+                    {FACTORY_ADDRESS}
+                  </span>
                 </div>
 
                 <div className="hidden sm:block w-px h-6 bg-outline-variant/50 self-center" />
@@ -285,36 +314,45 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     0821-2466-1966
                   </span>
                 </div>
+
               </div>
 
               {/* HERO BUTTONS */}
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
 
                 <button
-                  onClick={() => setIsOrderModalOpen(true)}
+                  onClick={() =>
+                    setIsOrderModalOpen(true)
+                  }
                   className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-8 py-4 rounded-xl font-bold text-sm sm:text-base transition-all shadow-[0_8px_30px_rgb(0,106,52,0.15)] hover:-translate-y-0.5 active:scale-95"
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     chat
                   </span>
 
-                  <span>Pesan Sekarang via WhatsApp</span>
+                  <span>
+                    Pesan Sekarang via WhatsApp
+                  </span>
                 </button>
 
                 <a
-                  className="flex items-center justify-center gap-2 bg-surface hover:bg-surface-variant text-primary border border-outline-variant px-8 py-4 rounded-xl font-bold text-sm sm:text-base transition-all"
                   href="#produk"
+                  className="flex items-center justify-center gap-2 bg-surface hover:bg-surface-variant text-primary border border-outline-variant px-8 py-4 rounded-xl font-bold text-sm sm:text-base transition-all"
                 >
-                  <span>Lihat Produk</span>
+                  <span>
+                    Lihat Produk
+                  </span>
                 </a>
+
               </div>
+
             </div>
           </div>
         </section>
 
         {/* =========================
             KEUNGGULAN
-        ========================== */}
+        ========================= */}
         <section
           className="py-16 md:py-24 px-6 bg-surface"
           id="mengapa"
@@ -328,95 +366,71 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </h2>
 
               <p className="text-base text-on-surface-variant max-w-2xl mx-auto">
-                Kami berkomitmen memberikan kualitas terbaik untuk setiap
-                olahan kedelai yang sampai ke meja makan Anda.
+                Kami berkomitmen memberikan
+                kualitas terbaik untuk setiap
+                olahan kedelai yang sampai ke
+                meja makan Anda.
               </p>
+
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-              {/* CARD 1 */}
-              <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 group">
+              {[
+                {
+                  icon: 'verified',
+                  title: 'Kualitas Terbaik',
+                  description:
+                    'Diproses dari kedelai pilihan dengan standar kebersihan tinggi untuk hasil yang padat dan bergizi.',
+                },
+                {
+                  icon: 'local_florist',
+                  title: 'Selalu Fresh',
+                  description:
+                    'Produksi setiap hari. Anda selalu mendapatkan produk segar langsung dari pabrik kami.',
+                },
+                {
+                  icon: 'payments',
+                  title: 'Harga Bersahabat',
+                  description:
+                    'Harga kompetitif yang cocok untuk kebutuhan rumah tangga maupun margin usaha Anda.',
+                },
+                {
+                  icon: 'support_agent',
+                  title: 'Siap Melayani',
+                  description:
+                    'Layanan responsif via WhatsApp untuk memastikan pesanan Anda tercatat dan dikirim dengan baik.',
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 group"
+                >
 
-                <div className="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
-                  <span className="material-symbols-outlined text-primary text-[32px]">
-                    verified
-                  </span>
+                  <div className="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
+                    <span className="material-symbols-outlined text-primary text-[32px]">
+                      {item.icon}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-semibold text-on-surface mb-3">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
+                    {item.description}
+                  </p>
+
                 </div>
+              ))}
 
-                <h3 className="text-xl font-semibold text-on-surface mb-3">
-                  Kualitas Terbaik
-                </h3>
-
-                <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                  Diproses dari kedelai pilihan dengan standar kebersihan
-                  tinggi untuk hasil yang padat dan berkualitas.
-                </p>
-              </div>
-
-              {/* CARD 2 */}
-              <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 group">
-
-                <div className="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
-                  <span className="material-symbols-outlined text-primary text-[32px]">
-                    local_florist
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-semibold text-on-surface mb-3">
-                  Selalu Fresh
-                </h3>
-
-                <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                  Produksi setiap hari sehingga Anda mendapatkan produk
-                  segar langsung dari pabrik kami.
-                </p>
-              </div>
-
-              {/* CARD 3 */}
-              <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 group">
-
-                <div className="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
-                  <span className="material-symbols-outlined text-primary text-[32px]">
-                    payments
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-semibold text-on-surface mb-3">
-                  Harga Bersahabat
-                </h3>
-
-                <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                  Harga kompetitif untuk kebutuhan rumah tangga maupun
-                  kebutuhan usaha.
-                </p>
-              </div>
-
-              {/* CARD 4 */}
-              <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 group">
-
-                <div className="w-16 h-16 bg-surface-container-low rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container/10 transition-colors">
-                  <span className="material-symbols-outlined text-primary text-[32px]">
-                    support_agent
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-semibold text-on-surface mb-3">
-                  Siap Melayani
-                </h3>
-
-                <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                  Layanan responsif melalui WhatsApp untuk kebutuhan
-                  pemesanan Anda.
-                </p>
-              </div>
             </div>
           </div>
         </section>
 
         {/* =========================
             PRODUK
-        ========================== */}
+        ========================= */}
         <section
           className="py-16 md:py-24 px-6 bg-surface-container-low"
           id="produk"
@@ -430,9 +444,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </h2>
 
               <p className="text-base text-on-surface-variant max-w-2xl mx-auto">
-                Pilihan tahu dan tempe segar terbaik untuk kebutuhan
+                Pilihan produk tahu dan tempe
+                segar terbaik untuk kebutuhan
                 harian maupun bisnis Anda.
               </p>
+
             </div>
 
             {/* TEMPE */}
@@ -442,61 +458,73 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-outline-variant/30">
 
                   <h3 className="text-2xl font-bold text-primary">
-                    Tempe
+                    TEMPE
                   </h3>
 
                   <span className="text-xs text-on-surface-variant font-medium bg-surface-container px-3 py-1 rounded-full">
                     {tempeProducts.length} Varian
                   </span>
+
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                  {tempeProducts.map((product) => (
-                    <div
-                      key={product.id}
-                      className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full group"
-                    >
-
-                      <div className="relative mb-6 rounded-2xl overflow-hidden bg-surface-container-low aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
-
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-
-                        <div className="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
-                          {formatRupiah(product.basePrice)}
-                        </div>
-                      </div>
-
-                      <div className="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center mb-4 text-primary">
-                        <span className="material-symbols-outlined text-[28px]">
-                          inventory_2
-                        </span>
-                      </div>
-
-                      <h4 className="text-xl font-bold text-on-surface mb-2 uppercase">
-                        {product.name}
-                      </h4>
-
-                      <p className="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">
-                        {product.description}
-                      </p>
-
-                      <button
-                        onClick={() => openOrderWithProduct(product)}
-                        className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-4 py-3 rounded-xl font-bold text-sm transition-all shadow-[0_4px_14px_0_rgba(0,106,52,0.15)] w-full active:scale-95"
+                  {tempeProducts.map(
+                    (product) => (
+                      <div
+                        key={product.id}
+                        className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full group"
                       >
-                        <span className="material-symbols-outlined text-[18px]">
-                          shopping_cart
-                        </span>
 
-                        <span>Pesan via WhatsApp</span>
-                      </button>
-                    </div>
-                  ))}
+                        <div className="relative mb-6 rounded-2xl overflow-hidden bg-surface-container-low aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
+
+                          <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+
+                          <div className="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
+                            {formatRupiah(
+                              product.basePrice
+                            )}
+                          </div>
+
+                        </div>
+
+                        <div className="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center mb-4 text-primary">
+                          <span className="material-symbols-outlined text-[28px]">
+                            inventory_2
+                          </span>
+                        </div>
+
+                        <h4 className="text-xl font-bold text-on-surface mb-2 uppercase">
+                          {product.name}
+                        </h4>
+
+                        <p className="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">
+                          {product.description}
+                        </p>
+
+                        <button
+                          onClick={() =>
+                            openOrderWithProduct(
+                              product
+                            )
+                          }
+                          className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-4 py-3 rounded-xl font-bold text-sm transition-all w-full active:scale-95"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            shopping_cart
+                          </span>
+
+                          Pesan via WhatsApp
+                        </button>
+
+                      </div>
+                    )
+                  )}
+
                 </div>
               </div>
             )}
@@ -508,132 +536,156 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-outline-variant/30">
 
                   <h3 className="text-2xl font-bold text-primary">
-                    Tahu
+                    TAHU
                   </h3>
 
                   <span className="text-xs text-on-surface-variant font-medium bg-surface-container px-3 py-1 rounded-full">
                     {tahuProducts.length} Varian
                   </span>
+
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                  {tahuProducts.map((product) => (
-                    <div
-                      key={product.id}
-                      className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full group"
-                    >
-
-                      <div className="relative mb-6 rounded-2xl overflow-hidden bg-surface-container-low aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
-
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-
-                        <div className="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
-                          {formatRupiah(product.basePrice)}
-                        </div>
-                      </div>
-
-                      <div className="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center mb-4 text-primary">
-                        <span className="material-symbols-outlined text-[28px]">
-                          dashboard_customize
-                        </span>
-                      </div>
-
-                      <h4 className="text-xl font-bold text-on-surface mb-1 uppercase">
-                        {product.name}
-                      </h4>
-
-                      <p className="text-lg text-primary font-bold mb-2">
-                        {formatRupiah(product.basePrice)}
-
-                        <span className="text-sm text-on-surface-variant font-normal">
-                          {' '}
-                          / {product.unit}
-                        </span>
-                      </p>
-
-                      <p className="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">
-                        {product.description}
-                      </p>
-
-                      <button
-                        onClick={() => openOrderWithProduct(product)}
-                        className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-4 py-3 rounded-xl font-bold text-sm transition-all shadow-[0_4px_14px_0_rgba(0,106,52,0.15)] w-full active:scale-95"
+                  {tahuProducts.map(
+                    (product) => (
+                      <div
+                        key={product.id}
+                        className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full group"
                       >
-                        <span className="material-symbols-outlined text-[18px]">
-                          shopping_cart
-                        </span>
 
-                        <span>Pesan via WhatsApp</span>
-                      </button>
-                    </div>
-                  ))}
+                        <div className="relative mb-6 rounded-2xl overflow-hidden bg-surface-container-low aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
+
+                          <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+
+                          <div className="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
+                            {formatRupiah(
+                              product.basePrice
+                            )}
+                          </div>
+
+                        </div>
+
+                        <div className="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center mb-4 text-primary">
+                          <span className="material-symbols-outlined text-[28px]">
+                            dashboard_customize
+                          </span>
+                        </div>
+
+                        <h4 className="text-xl font-bold text-on-surface mb-1 uppercase">
+                          {product.name}
+                        </h4>
+
+                        <p className="text-lg text-primary font-bold mb-2">
+                          {formatRupiah(
+                            product.basePrice
+                          )}{' '}
+                          <span className="text-sm text-on-surface-variant font-normal">
+                            / {product.unit}
+                          </span>
+                        </p>
+
+                        <p className="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">
+                          {product.description}
+                        </p>
+
+                        <button
+                          onClick={() =>
+                            openOrderWithProduct(
+                              product
+                            )
+                          }
+                          className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-4 py-3 rounded-xl font-bold text-sm transition-all w-full active:scale-95"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            shopping_cart
+                          </span>
+
+                          Pesan via WhatsApp
+                        </button>
+
+                      </div>
+                    )
+                  )}
+
                 </div>
               </div>
             )}
 
-            {/* PRODUK LAINNYA */}
+            {/* PRODUK LAIN */}
             {otherProducts.length > 0 && (
               <div className="mt-16">
 
                 <h3 className="text-2xl font-bold text-primary mb-8 pb-4 border-b border-outline-variant/30">
-                  Produk Lainnya
+                  PRODUK LAINNYA
                 </h3>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                  {otherProducts.map((product) => (
-                    <div
-                      key={product.id}
-                      className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 shadow-[0_12px_40px_-12px_rgba(0,106,52,0.08)] hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full group"
-                    >
-
-                      <div className="relative mb-6 rounded-2xl overflow-hidden bg-surface-container-low aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
-
-                        <img
-                          src={product.imageUrl}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-
-                      <h4 className="text-xl font-bold text-on-surface mb-1">
-                        {product.name}
-                      </h4>
-
-                      <p className="text-lg text-primary font-bold mb-2">
-                        {formatRupiah(product.basePrice)}
-                      </p>
-
-                      <p className="text-sm text-on-surface-variant mb-6 flex-grow">
-                        {product.description}
-                      </p>
-
-                      <button
-                        onClick={() => openOrderWithProduct(product)}
-                        className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-4 py-3 rounded-xl font-bold text-sm transition-all shadow-[0_4px_14px_0_rgba(0,106,52,0.15)] w-full"
+                  {otherProducts.map(
+                    (product) => (
+                      <div
+                        key={product.id}
+                        className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/30 flex flex-col h-full group"
                       >
-                        <span className="material-symbols-outlined text-[18px]">
-                          shopping_cart
-                        </span>
 
-                        Pesan via WhatsApp
-                      </button>
-                    </div>
-                  ))}
+                        <div className="relative mb-6 rounded-2xl overflow-hidden bg-surface-container-low aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
+
+                          <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+
+                        </div>
+
+                        <h4 className="text-xl font-bold text-on-surface mb-1">
+                          {product.name}
+                        </h4>
+
+                        <p className="text-lg text-primary font-bold mb-2">
+                          {formatRupiah(
+                            product.basePrice
+                          )}
+                        </p>
+
+                        <p className="text-sm text-on-surface-variant mb-6 flex-grow">
+                          {product.description}
+                        </p>
+
+                        <button
+                          onClick={() =>
+                            openOrderWithProduct(
+                              product
+                            )
+                          }
+                          className="flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary px-4 py-3 rounded-xl font-bold text-sm transition-all w-full"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            shopping_cart
+                          </span>
+
+                          Pesan via WhatsApp
+                        </button>
+
+                      </div>
+                    )
+                  )}
+
                 </div>
               </div>
             )}
+
           </div>
         </section>
 
         {/* =========================
-            KONTAK / KEMITRAAN
-        ========================== */}
+            KONTAK
+        ========================= */}
         <section
           className="py-16 px-6 bg-primary text-on-primary"
           id="kontak"
@@ -651,16 +703,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </h2>
 
               <p className="text-on-primary/80 max-w-xl text-sm sm:text-base leading-relaxed">
-                Dapatkan harga grosir spesial dengan jadwal pengiriman
-                tepat waktu langsung dari fasilitas produksi kami di
-                Jayaraga, Tarogong Kidul.
+                Dapatkan harga grosir spesial
+                dengan jadwal pengiriman tepat
+                waktu langsung dari fasilitas
+                produksi kami di Jayaraga,
+                Tarogong Kidul.
               </p>
+
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
 
               <button
-                onClick={() => setIsOrderModalOpen(true)}
+                onClick={() =>
+                  setIsOrderModalOpen(true)
+                }
                 className="bg-white text-primary hover:bg-surface px-8 py-4 rounded-xl font-bold text-center shadow-lg transition-all hover:scale-105"
               >
                 Mulai Pesanan Sekarang
@@ -674,14 +731,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               >
                 Konsultasi WhatsApp
               </a>
+
             </div>
           </div>
         </section>
+
       </main>
 
       {/* =========================
           FOOTER
-      ========================== */}
+      ========================= */}
       <footer className="bg-surface-container-highest w-full border-t border-outline-variant/30">
 
         <div className="flex flex-col md:flex-row justify-between gap-8 px-6 py-16 max-w-[1280px] mx-auto w-full">
@@ -693,31 +752,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </span>
 
             <p className="text-sm text-on-surface-variant leading-relaxed">
-              Pabrik Tahu &amp; Tempe berkualitas dari Jayaraga,
-              Tarogong Kidul, Garut. Melayani kebutuhan rumah tangga
-              dan mitra usaha.
+              Pabrik Tahu &amp; Tempe berkualitas
+              dari Jayaraga, Garut. Melayani
+              kebutuhan rumah tangga dan
+              mitra usaha.
             </p>
 
-            <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-              <span className="material-symbols-outlined text-primary text-[18px]">
-                location_on
-              </span>
-
-              <span>{FACTORY_ADDRESS}</span>
-            </div>
-
-            <a
-              href={defaultWaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-primary font-semibold hover:underline"
-            >
-              <span className="material-symbols-outlined text-[18px]">
-                phone
-              </span>
-
-              0821-2466-1966
-            </a>
           </div>
 
           <div className="flex flex-col md:flex-row gap-12 md:gap-24">
@@ -746,8 +786,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 href="#mengapa"
                 className="text-sm text-on-surface-variant hover:text-primary transition-colors"
               >
-                Tentang EKA SUPER
+                Tentang Kami
               </a>
+
             </div>
 
             <div className="flex flex-col gap-3">
@@ -757,10 +798,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </span>
 
               <a
-                href="#produk"
+                href="#kontak"
                 className="text-sm text-on-surface-variant hover:text-primary transition-colors"
               >
-                Cara Pemesanan
+                Panduan Pemesanan
               </a>
 
               <a
@@ -775,22 +816,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <span className="text-sm text-on-surface-variant">
                 Melayani Area Garut
               </span>
+
             </div>
+
           </div>
         </div>
 
         <div className="border-t border-outline-variant/20 px-6 py-6 max-w-[1280px] mx-auto text-center md:text-left">
 
           <p className="text-xs sm:text-sm text-on-surface-variant">
-            © {new Date().getFullYear()} EKA SUPER Garut. Tahu &amp; Tempe
-            Berkualitas. All Rights Reserved.
+            © 2026 EKA SUPER Garut. Tahu &amp;
+            Tempe Berkualitas. All Rights Reserved.
           </p>
+
         </div>
+
       </footer>
 
       {/* =========================
           FLOATING WHATSAPP
-      ========================== */}
+      ========================= */}
       <a
         className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#1DA851] text-white p-4 rounded-full shadow-[0_8px_25px_0_rgba(37,211,102,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group"
         href={defaultWaUrl}
@@ -802,24 +847,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           className="w-8 h-8 fill-current"
           viewBox="0 0 24 24"
         >
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
         </svg>
       </a>
 
       {/* =========================
           ORDER MODAL
-      ========================== */}
+      ========================= */}
       <OrderDrawerModal
         isOpen={isOrderModalOpen}
-        onClose={() => {
-          setIsOrderModalOpen(false);
-          setSelectedProductForOrder(null);
-        }}
+        onClose={() =>
+          setIsOrderModalOpen(false)
+        }
         products={products}
-        selectedProduct={selectedProductForOrder}
+        selectedProduct={
+          selectedProductForOrder
+        }
         onOrderPlaced={onPlaceOrder}
       />
+
     </div>
   );
 };
-```
