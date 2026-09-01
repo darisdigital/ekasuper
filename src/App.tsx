@@ -1,3 +1,4 @@
+```tsx
 import React, { useState, useEffect } from 'react';
 import { Product, Order, Customer, InventoryLog } from './types';
 import {
@@ -8,10 +9,11 @@ import {
 } from './data/initialData';
 import { AdminConsole } from './components/AdminConsole';
 import { LandingPage } from './components/LandingPage';
-import { ScreenSwitcher } from './components/ScreenSwitcher';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'admin' | 'landing'>('admin');
+  // Website publik selalu membuka Landing Page.
+  // Admin tetap ada di dalam project, tetapi tidak ditampilkan kepada pengunjung.
+  const [currentScreen, setCurrentScreen] = useState<'admin' | 'landing'>('landing');
 
   // Products state with localStorage persistence
   const [products, setProducts] = useState<Product[]>(() => {
@@ -70,6 +72,7 @@ export default function App() {
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
+
     setTimeout(() => {
       setToastMessage(null);
     }, 3500);
@@ -96,8 +99,10 @@ export default function App() {
   const handleUpdateProduct = (updated: Product) => {
     setProducts((prev) => {
       const oldProd = prev.find((p) => p.id === updated.id);
+
       if (oldProd && oldProd.stockLevel !== updated.stockLevel) {
         const diff = updated.stockLevel - oldProd.stockLevel;
+
         const newLog: InventoryLog = {
           id: `log-${Date.now()}`,
           productId: updated.id,
@@ -109,16 +114,22 @@ export default function App() {
           date: 'Baru saja',
           notes: 'Penyesuaian cepat via Admin Console'
         };
+
         setInventoryLogs((l) => [newLog, ...l]);
       }
-      return prev.map((p) => (p.id === updated.id ? updated : p));
+
+      return prev.map((p) =>
+        p.id === updated.id ? updated : p
+      );
     });
+
     showToast(`Produk "${updated.name}" berhasil diperbarui.`);
   };
 
   // Add Product Handler
   const handleAddProduct = (newProdData: Omit<Product, 'id'>) => {
     const newId = `prod-${Date.now()}`;
+
     const newProduct: Product = {
       ...newProdData,
       id: newId
@@ -137,6 +148,7 @@ export default function App() {
       date: 'Baru saja',
       notes: 'Penambahan varian produk baru ke katalog'
     };
+
     setInventoryLogs((l) => [newLog, ...l]);
 
     showToast(`Produk "${newProduct.name}" berhasil ditambahkan.`);
@@ -145,13 +157,17 @@ export default function App() {
   // Delete Product Handler
   const handleDeleteProduct = (id: string) => {
     const target = products.find((p) => p.id === id);
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+
+    setProducts((prev) =>
+      prev.filter((p) => p.id !== id)
+    );
+
     if (target) {
       showToast(`Produk "${target.name}" telah dihapus.`);
     }
   };
 
-  // Order Placement Handler (from Landing Page WhatsApp Order)
+  // Order Placement Handler
   const handlePlaceOrder = (summary: any) => {
     const orderId = `ord-${Date.now()}`;
     const orderNum = `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
@@ -178,31 +194,53 @@ export default function App() {
 
     setOrders((prev) => [newOrder, ...prev]);
 
-    // Decrease product stock
+    // Kurangi stok produk
     setProducts((prev) =>
       prev.map((prod) => {
-        const matchingItem = summary.items.find((it: any) => it.product.id === prod.id);
+        const matchingItem = summary.items.find(
+          (it: any) => it.product.id === prod.id
+        );
+
         if (matchingItem) {
-          const newStock = Math.max(0, prod.stockLevel - matchingItem.quantity);
+          const newStock = Math.max(
+            0,
+            prod.stockLevel - matchingItem.quantity
+          );
+
           const newStatus =
-            newStock <= 0 ? 'Out of Stock' : newStock <= prod.minStockAlert ? 'Low Stock' : 'In Stock';
+            newStock <= 0
+              ? 'Out of Stock'
+              : newStock <= prod.minStockAlert
+                ? 'Low Stock'
+                : 'In Stock';
+
           return {
             ...prod,
             stockLevel: newStock,
             status: newStatus
           };
         }
+
         return prod;
       })
     );
 
-    showToast('Pesanan WhatsApp berhasil dicatat ke Admin Console!');
+    showToast('Pesanan WhatsApp berhasil dicatat.');
   };
 
   return (
     <div className="min-h-screen bg-background text-on-background">
-      {/* Active Screen View */}
-      {currentScreen === 'admin' ? (
+
+      {/* Website publik */}
+      {currentScreen === 'landing' ? (
+        <LandingPage
+          products={products}
+          onOpenAdmin={() => setCurrentScreen('admin')}
+          onPlaceOrder={handlePlaceOrder}
+        />
+      ) : (
+        /* Admin tetap tersedia untuk pemilik website,
+           tetapi tidak ditampilkan melalui tombol publik. */
         <AdminConsole
           products={products}
           orders={orders}
@@ -213,24 +251,22 @@ export default function App() {
           onDeleteProduct={handleDeleteProduct}
           onSwitchToStorefront={() => setCurrentScreen('landing')}
         />
-      ) : (
-        <LandingPage
-          products={products}
-          onOpenAdmin={() => setCurrentScreen('admin')}
-          onPlaceOrder={handlePlaceOrder}
-        />
       )}
 
-      {/* Floating Bottom View Switcher */}
-      <ScreenSwitcher currentScreen={currentScreen} onSwitch={setCurrentScreen} />
+      {/* ScreenSwitcher DIHAPUS agar pengunjung tidak melihat
+          tombol Dashboard Admin */}
 
       {/* Toast feedback */}
       {toastMessage && (
         <div className="fixed top-20 right-6 z-50 bg-primary text-on-primary px-5 py-3 rounded-xl shadow-xl flex items-center gap-2 text-sm font-semibold animate-fadeIn">
-          <span className="material-symbols-outlined text-base">check_circle</span>
+          <span className="material-symbols-outlined text-base">
+            check_circle
+          </span>
+
           <span>{toastMessage}</span>
         </div>
       )}
     </div>
   );
 }
+```
